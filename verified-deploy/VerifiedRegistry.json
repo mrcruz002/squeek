@@ -1,0 +1,169 @@
+{
+  "abi": [
+    {
+      "type": "constructor",
+      "inputs": [
+        {
+          "name": "owner_",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "isVerified",
+      "inputs": [
+        {
+          "name": "collection",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool",
+          "internalType": "bool"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "owner",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "renounceOwnership",
+      "inputs": [],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "setVerified",
+      "inputs": [
+        {
+          "name": "collection",
+          "type": "address",
+          "internalType": "address"
+        },
+        {
+          "name": "verified_",
+          "type": "bool",
+          "internalType": "bool"
+        }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "transferOwnership",
+      "inputs": [
+        {
+          "name": "newOwner",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "verified",
+      "inputs": [
+        {
+          "name": "",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool",
+          "internalType": "bool"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "event",
+      "name": "OwnershipTransferred",
+      "inputs": [
+        {
+          "name": "previousOwner",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "newOwner",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "VerifiedSet",
+      "inputs": [
+        {
+          "name": "collection",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "verified",
+          "type": "bool",
+          "indexed": false,
+          "internalType": "bool"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "error",
+      "name": "OwnableInvalidOwner",
+      "inputs": [
+        {
+          "name": "owner",
+          "type": "address",
+          "internalType": "address"
+        }
+      ]
+    },
+    {
+      "type": "error",
+      "name": "OwnableUnauthorizedAccount",
+      "inputs": [
+        {
+          "name": "account",
+          "type": "address",
+          "internalType": "address"
+        }
+      ]
+    }
+  ],
+  "bytecode": {
+    "object": "0x608060405234801561000f575f80fd5b506040516103e53803806103e583398101604081905261002e916100bb565b806001600160a01b03811661005c57604051631e4fbdf760e01b81525f600482015260240160405180910390fd5b6100658161006c565b50506100e8565b5f80546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b5f602082840312156100cb575f80fd5b81516001600160a01b03811681146100e1575f80fd5b9392505050565b6102f0806100f55f395ff3fe608060405234801561000f575f80fd5b5060043610610060575f3560e01c80630db065f414610064578063715018a61461009b5780638da5cb5b146100a55780639cf5c613146100bf578063b9209e33146100d2578063f2fde38b146100fd575b5f80fd5b610086610072366004610261565b60016020525f908152604090205460ff1681565b60405190151581526020015b60405180910390f35b6100a3610110565b005b5f546040516001600160a01b039091168152602001610092565b6100a36100cd366004610281565b610123565b6100866100e0366004610261565b6001600160a01b03165f9081526001602052604090205460ff1690565b6100a361010b366004610261565b610189565b6101186101cb565b6101215f6101f7565b565b61012b6101cb565b6001600160a01b0382165f81815260016020908152604091829020805460ff191685151590811790915591519182527fed3c0cf2b1ba472d6ece2e2e0b97840823bc20ea4d3323099f3e49bf887fcc46910160405180910390a25050565b6101916101cb565b6001600160a01b0381166101bf57604051631e4fbdf760e01b81525f60048201526024015b60405180910390fd5b6101c8816101f7565b50565b5f546001600160a01b031633146101215760405163118cdaa760e01b81523360048201526024016101b6565b5f80546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b80356001600160a01b038116811461025c575f80fd5b919050565b5f60208284031215610271575f80fd5b61027a82610246565b9392505050565b5f8060408385031215610292575f80fd5b61029b83610246565b9150602083013580151581146102af575f80fd5b80915050925092905056fea26469706673582212201ffe177f38da1a54d7d4e3e9017f0373ccba09f064899ae125bfe0959cd77c5864736f6c63430008180033",
+    "sourceMap": "481:504:50:-:0;;;638:46;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;674:6;-1:-1:-1;;;;;1273:26:20;;1269:95;;1322:31;;-1:-1:-1;;;1322:31:20;;1350:1;1322:31;;;455:51:54;428:18;;1322:31:20;;;;;;;1269:95;1373:32;1392:12;1373:18;:32::i;:::-;1225:187;638:46:50;481:504;;2912:187:20;2985:16;3004:6;;-1:-1:-1;;;;;3020:17:20;;;-1:-1:-1;;;;;;3020:17:20;;;;;;3052:40;;3004:6;;;;;;;3052:40;;2985:16;3052:40;2975:124;2912:187;:::o;14:290:54:-;84:6;137:2;125:9;116:7;112:23;108:32;105:52;;;153:1;150;143:12;105:52;179:16;;-1:-1:-1;;;;;224:31:54;;214:42;;204:70;;270:1;267;260:12;204:70;293:5;14:290;-1:-1:-1;;;14:290:54:o;309:203::-;481:504:50;;;;;;",
+    "linkReferences": {}
+  }
+}

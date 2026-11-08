@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+contracts/lib/
+
+# Local environment (examples are committed)
+.env
+
+# Build outputs
+frontend/dist/
+contracts/out/
+contracts/cache/
+
+# Indexer database
+indexer/data/
+
+# OS
+.DS_Store

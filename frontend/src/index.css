@@ -1,0 +1,737 @@
+/* Squeekchain Launchpad — Genesis restyle (Phase 2).
+ * Consumes the tokens in design-tokens.css. All logic untouched. */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-voice);
+  font-weight: 600;
+  background: var(--sq-bg);
+  color: var(--sq-ink);
+  line-height: 1.6;
+}
+
+/* Headings: Barlow Condensed, tall spaced caps. */
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1.05;
+  color: var(--sq-ink);
+  margin: 0 0 0.75rem;
+}
+h1 {
+  font-size: 2.6rem;
+}
+h2 {
+  font-size: 1.8rem;
+}
+h3 {
+  font-size: 1.4rem;
+}
+
+a {
+  color: var(--sq-blue);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* TEST NETWORK banner — cream, mono caps. */
+.test-banner {
+  background: var(--sq-cream);
+  color: var(--sq-ink);
+  text-align: center;
+  font-family: var(--font-data);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--sq-border);
+}
+
+/* Sticky white pill header, Genesis style. */
+.header {
+  position: sticky;
+  top: 0.75rem;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 0.75rem 1rem 0;
+  padding: 0.5rem 1.25rem;
+  background: #fff;
+  border: 1px solid var(--sq-border);
+  border-radius: 999px;
+  box-shadow: 0 2px 10px rgba(42, 42, 51, 0.07);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.35rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sq-ink);
+  white-space: nowrap;
+}
+.brand:hover {
+  text-decoration: none;
+}
+.brand-hamster {
+  width: 34px;
+  height: 34px;
+  border-radius: 3px;
+  object-fit: cover;
+  flex: 0 0 auto;
+}
+.brand-word {
+  color: var(--sq-ink);
+}
+.brand-word em {
+  font-style: normal;
+  color: var(--sq-blue);
+}
+
+.header nav {
+  display: flex;
+  gap: 0.25rem;
+}
+.header nav a {
+  font-family: var(--font-data);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sq-ink);
+  padding: 0.45rem 0.8rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+}
+.header nav a:hover {
+  text-decoration: none;
+  border-color: var(--sq-border-strong);
+  color: var(--sq-blue);
+}
+.header nav a.active {
+  background: var(--sq-blue);
+  border-color: var(--sq-blue);
+  color: #fff;
+}
+
+.connect {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.address-pill {
+  background: var(--sq-raised);
+  border: 1px solid var(--sq-border-strong);
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  font-family: var(--font-data);
+  font-size: 0.85rem;
+  color: var(--sq-ink);
+}
+
+.main {
+  flex: 1;
+  width: 100%;
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+}
+
+.footer {
+  border-top: 1px solid var(--sq-border);
+  padding: 1.5rem 1.25rem 2rem;
+  text-align: center;
+  background: var(--sq-surface);
+}
+.footer-hamster {
+  width: 72px;
+  height: 72px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+.footer-tagline {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.5rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sq-ink);
+  margin: 0.5rem 0 0.75rem;
+}
+
+/* Hero card on Home — dot-grid background, big wordmark. */
+.hero {
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--sq-border);
+  border-radius: 4px;
+  background-color: var(--sq-surface);
+  background-image: radial-gradient(circle, var(--sq-border-strong) 1px, transparent 1.3px);
+  background-size: 14px 14px;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 1px 3px rgba(42, 42, 51, 0.05);
+}
+.hero-inner {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+.hero-hamster {
+  width: 110px;
+  height: 110px;
+  border-radius: 4px;
+  object-fit: cover;
+  flex: 0 0 auto;
+  border: 1px solid var(--sq-border-strong);
+}
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 0.25rem;
+}
+.wordmark-orange {
+  background: linear-gradient(90deg, var(--sq-orange), var(--sq-gold));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.wordmark-blue {
+  background: linear-gradient(90deg, var(--sq-blue), var(--sq-blue-deep));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Counters row — big tabular numbers, small grey uppercase labels. */
+.counters {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--sq-border);
+}
+.counter-value {
+  font-family: var(--font-data);
+  font-size: 1.75rem;
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--sq-ink);
+}
+.counter-label {
+  font-family: var(--font-data);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--sq-grey);
+}
+
+.narrow {
+  max-width: 640px;
+}
+
+/* Cards: flat, off-white, almost-square corners, thin grey outline. */
+.card {
+  background: var(--sq-surface);
+  border: 1px solid var(--sq-border);
+  border-radius: 4px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 3px rgba(42, 42, 51, 0.05);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.grid-two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+@media (max-width: 720px) {
+  .grid-two {
+    grid-template-columns: 1fr;
+  }
+}
+
+.collection-card {
+  display: block;
+  color: inherit;
+}
+.collection-card:hover {
+  border-color: var(--sq-blue);
+  text-decoration: none;
+}
+.collection-card h3 {
+  margin: 0 0 0.5rem;
+}
+
+.empty {
+  text-align: center;
+  padding: 2rem;
+}
+
+/* Buttons: near-black primary rectangles, white uppercase mono text. */
+.btn {
+  cursor: pointer;
+  border: 1px solid var(--sq-ink-strong);
+  background: #fff;
+  color: var(--sq-ink-strong);
+  border-radius: 3px;
+  padding: 0.55rem 1rem;
+  font-family: var(--font-data);
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.btn:hover:not(:disabled) {
+  border-color: var(--sq-blue);
+  color: var(--sq-blue);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.btn-primary {
+  background: var(--sq-ink-strong);
+  border-color: var(--sq-ink-strong);
+  color: #fff;
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--sq-blue);
+  border-color: var(--sq-blue);
+  color: #fff;
+}
+.btn-warn {
+  background: var(--sq-cream);
+  border-color: var(--sq-orange);
+}
+.btn-warn:hover:not(:disabled) {
+  border-color: var(--sq-orange);
+  color: var(--sq-ink-strong);
+}
+.btn-small {
+  padding: 0.25rem 0.6rem;
+}
+.btn-block {
+  width: 100%;
+  padding: 0.75rem 1rem;
+}
+
+/* Network switch button in the header: Genesis blue, stands out from the
+ * near-black primary buttons — this is the button that stops real-ETH
+ * accidents, so it must be unmissable. */
+.btn-switch {
+  background: var(--sq-blue);
+  border-color: var(--sq-blue);
+  color: #fff;
+}
+.btn-switch:hover:not(:disabled) {
+  background: var(--sq-blue-deep);
+  border-color: var(--sq-blue-deep);
+  color: #fff;
+}
+
+/* Manual add-network details, shown as a full-width row inside the sticky
+ * header when the automatic switch fails. */
+.network-add {
+  flex-basis: 100%;
+  background: var(--sq-cream);
+  border: 1px solid var(--sq-orange);
+  border-radius: 3px;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.85rem;
+  text-align: left;
+}
+.network-add p {
+  margin: 0 0 0.35rem;
+}
+.network-add ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-family: var(--font-data);
+  font-size: 0.85rem;
+  word-break: break-all;
+}
+
+/* Inputs: white boxes, grey borders, uppercase mono placeholders. */
+input {
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--sq-border-strong);
+  border-radius: 3px;
+  font-family: var(--font-data);
+  font-size: 0.95rem;
+  margin-top: 0.25rem;
+  background: #fff;
+  color: var(--sq-ink);
+}
+input::placeholder {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.85rem;
+  color: var(--sq-grey);
+}
+input:focus {
+  outline: none;
+  border-color: var(--sq-blue);
+  box-shadow: 0 0 0 2px rgba(68, 96, 207, 0.15);
+}
+
+.form label {
+  display: block;
+  font-family: var(--font-data);
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sq-ink);
+  margin-bottom: 0.9rem;
+}
+.form label .muted {
+  font-family: var(--font-voice);
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 600;
+}
+
+/* Data text: mono, small, breaks long hashes. */
+.mono {
+  font-family: var(--font-data);
+  font-size: 0.85em;
+  word-break: break-all;
+}
+.break-all {
+  word-break: break-all;
+}
+.small {
+  font-size: 0.85rem;
+}
+.muted {
+  color: var(--sq-grey);
+}
+.error {
+  color: #b4232f;
+  background: #fdecef;
+  border: 1px solid #f9c2cb;
+  border-radius: 3px;
+  padding: 0.6rem 0.8rem;
+}
+.notice {
+  background: #eef1fd;
+  border: 1px solid #c3cdf5;
+  border-radius: 3px;
+  padding: 0.6rem 0.8rem;
+}
+.success-box {
+  background: #e6f7ee;
+  border: 1px solid #a8e6c3;
+  border-radius: 3px;
+  padding: 0.75rem 1rem;
+  margin-top: 1rem;
+}
+
+/* Details tables: thin row dividers, small grey uppercase labels, right-aligned numbers. */
+.details {
+  margin: 0 0 1rem;
+}
+.details > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid var(--sq-border);
+}
+.details dt {
+  font-family: var(--font-data);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sq-grey);
+}
+.details dd {
+  margin: 0;
+  text-align: right;
+  font-family: var(--font-data);
+  font-size: 0.9rem;
+}
+
+.status {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-family: var(--font-data);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.status-live {
+  background: #d9f4e4;
+  color: #146c43;
+}
+.status-not-started {
+  background: var(--sq-cream);
+  color: #7a5b00;
+}
+.status-ended {
+  background: #fdecef;
+  color: #b4232f;
+}
+
+.progress {
+  height: 8px;
+  background: var(--sq-raised);
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 0.5rem 0 1rem;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--sq-orange);
+}
+
+.qty-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+.qty-row label {
+  font-family: var(--font-data);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.qty-row input {
+  width: 5rem;
+  margin-top: 0;
+  text-align: center;
+}
+.total {
+  font-size: 1.1rem;
+}
+.total strong {
+  font-family: var(--font-data);
+  font-weight: 400;
+}
+
+.token-link {
+  display: inline-block;
+  margin: 0 0.5rem 0.5rem 0;
+  padding: 0.25rem 0.7rem;
+  border: 1px solid var(--sq-border-strong);
+  border-radius: 999px;
+  font-family: var(--font-data);
+  font-size: 0.85rem;
+  color: var(--sq-ink);
+}
+.token-link:hover {
+  border-color: var(--sq-blue);
+  color: var(--sq-blue);
+  text-decoration: none;
+}
+
+.token-image {
+  max-width: 100%;
+  border-radius: 4px;
+  margin: 1rem 0;
+  border: 1px solid var(--sq-border);
+}
+
+/* Drop cards: collection card plus a status row and countdown. */
+.drop-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+.drop-head h3 {
+  margin: 0;
+}
+.drop-head .status {
+  flex: 0 0 auto;
+  margin-top: 0.15rem;
+}
+.countdown {
+  font-family: var(--font-data);
+  font-size: 0.85rem;
+  margin-bottom: 0;
+}
+.countdown-live {
+  color: #146c43;
+}
+.countdown-soon {
+  color: var(--sq-blue);
+}
+
+/* Owned-NFT cards on the dashboard: image on top, details below. */
+.nft-card {
+  display: block;
+  color: inherit;
+  padding: 0;
+  overflow: hidden;
+}
+.nft-card:hover {
+  border-color: var(--sq-blue);
+  text-decoration: none;
+}
+.nft-image {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: block;
+  border-bottom: 1px solid var(--sq-border);
+}
+.nft-image-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-data);
+  font-size: 1.5rem;
+  color: var(--sq-grey);
+  background: var(--sq-raised);
+}
+.nft-body {
+  padding: 0.9rem 1rem 1rem;
+}
+.nft-body h3 {
+  margin: 0 0 0.25rem;
+}
+.nft-body p {
+  margin: 0 0 0.25rem;
+}
+
+/* Inner links on NFT cards keep the card's ink colour (the global `a`
+   rule is blue). The collection-name link is a separate link from the
+   token link, never nested inside it. */
+.nft-body h3 a,
+.nft-body p a {
+  color: inherit;
+}
+.nft-body h3 a:hover,
+.nft-body p a:hover {
+  color: var(--sq-blue);
+}
+
+/* The image slot on NFT cards is now a link wrapping the <img> (or the
+   #N placeholder); the image fills the slot. */
+.nft-image > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.nft-image > .nft-image-empty {
+  height: 100%;
+}
+
+/* Marketplace item cards: same card shell as OwnedNftCard, with a
+   full-width Make offer action. */
+.item-card .btn {
+  margin-top: 0.5rem;
+}
+
+/* Owned-tab bulk-accept checkbox on a grid card. */
+.select-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-data);
+  font-size: 0.85rem;
+  margin: 0.25rem 0 0.5rem;
+  cursor: pointer;
+}
+.select-row input[type='checkbox'] {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--sq-blue);
+  cursor: pointer;
+}
+
+/* Collection page tabs — OpenSea-style: mono uppercase labels with
+   counts, the active tab underlined in Genesis blue. Only the active
+   panel renders, so the holders list stays hidden until its tab opens. */
+.tabs {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--sq-border-strong);
+  margin: 1.25rem 0 1rem;
+}
+.tab {
+  cursor: pointer;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  padding: 0.6rem 0.9rem;
+  font-family: var(--font-data);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sq-grey);
+}
+.tab:hover {
+  color: var(--sq-blue);
+}
+.tab.active {
+  color: var(--sq-blue);
+  border-bottom-color: var(--sq-blue);
+}
+
+.raw-json {
+  background: var(--sq-raised);
+  border: 1px solid var(--sq-border);
+  border-radius: 3px;
+  padding: 0.75rem;
+  overflow: auto;
+  font-family: var(--font-data);
+  font-size: 0.8rem;
+}
+
+/* Verified-collection badge: Genesis blue checkmark in a small circle,
+ * shown next to a collection name when the on-chain VerifiedRegistry says
+ * the collection is verified. Renders nothing when unconfigured/unverified. */
+.verified-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.05rem;
+  height: 1.05rem;
+  border-radius: 999px;
+  background: var(--sq-blue);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1;
+  vertical-align: 0.1rem;
+  margin: 0 0.1rem;
+}

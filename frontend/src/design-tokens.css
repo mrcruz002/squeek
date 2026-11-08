@@ -1,0 +1,63 @@
+/* ---------------------------------------------------------------------------
+ * Squeekchain Launchpad — design tokens (Phase 2: Genesis restyle)
+ *
+ * Taken from squeekchain.com's own CSS, 6 Nov 2026 (light theme).
+ * One file holds the whole look so every page matches: import this first,
+ * then index.css. Nothing here touches contracts, chain config, or logic.
+ * ------------------------------------------------------------------------- */
+
+:root {
+  /* Palette */
+  --sq-bg: #f5f5f7; /* page background */
+  --sq-raised: #ededf0; /* raised surfaces */
+  --sq-surface: #f2f2f4; /* off-white cards */
+  --sq-ink: #2a2a33; /* near-black text */
+  --sq-ink-strong: #0b0b0d; /* near-black buttons */
+  --sq-blue: #4460cf; /* royal blue: accents, active tabs, links */
+  --sq-blue-deep: #2f4499; /* deep blue */
+  --sq-orange: #e8b04a; /* hamster orange */
+  --sq-active: #003a5c; /* active navy */
+  --sq-red: #f44a5e;
+  --sq-green: #35d07f;
+  --sq-gold: #f2c230;
+  --sq-grey: #6e6e7a; /* muted grey text */
+  --sq-border: #e0e0e6;
+  --sq-border-strong: #d2d2da;
+  --sq-cream: #fdfbc8; /* banner / highlight */
+
+  /* Type — three faces, per the Genesis site's own CSS */
+  --font-display: "Barlow Condensed", "Arial Narrow", sans-serif; /* headings, tall condensed caps */
+  --font-data: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace; /* labels, buttons, numbers */
+  --font-voice: "Quicksand", system-ui, sans-serif; /* body copy */
+}
+
+/* Dot-matrix motif — faint dot grid behind hero cards (Genesis signature). */
+.dot-grid {
+  background-image: radial-gradient(circle, var(--sq-border-strong) 1px, transparent 1.3px);
+  background-size: 14px 14px;
+}
+
+/* Small dotted square, used next to the hamster mark in the header. */
+.dot-square {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  border: 1px solid var(--sq-border-strong);
+  border-radius: 3px;
+  background-color: var(--sq-surface);
+  background-image: radial-gradient(circle, var(--sq-blue) 1.4px, transparent 1.6px);
+  background-size: 7px 7px;
+  background-position: center;
+}
+
+/* Small square bullets, Genesis style. */
+.sq-list {
+  list-style: none;
+  padding-left: 0;
+}
+.sq-list li::before {
+  content: "■";
+  color: var(--sq-orange);
+  margin-right: 0.5rem;
+  font-size: 0.7em;
+}

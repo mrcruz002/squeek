@@ -1,0 +1,22 @@
+# Caddyfile for the Railway static site (see Railway's SPA guide).
+# Railway terminates TLS at the edge, so Caddy only serves plain HTTP
+# on the injected $PORT. The site is a Vite SPA: serve dist/, fall back
+# to index.html for client-side routes.
+#
+# /indexer/* is reverse-proxied to the marketplace indexer on the Vultr
+# server. The browser only ever talks HTTPS to Railway, so this avoids
+# the mixed-content block that stops an HTTPS page fetching the
+# plain-HTTP indexer directly. handle_path strips the /indexer prefix,
+# so /indexer/status reaches the indexer as /status.
+:{$PORT:3000} {
+	handle_path /indexer/* {
+		reverse_proxy http://64.177.54.210:3001
+	}
+
+	handle {
+		root * dist
+		encode gzip
+		file_server
+		try_files {path} /index.html
+	}
+}
