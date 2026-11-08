@@ -1,14 +1,44 @@
 # Squeekchain NFT Launchpad
 
-An OpenSea-style NFT launchpad on **Squeekchain** (Sepolia testnet for now — Squeekchain
-mainnet does not exist yet). Creators launch ERC-721 collections through a factory; anyone
-can mint during a public sale window. Full plan: [`plan.md`](plan.md).
+An OpenSea-style NFT launchpad and marketplace on **Squeekchain** (Sepolia testnet for now —
+Squeekchain mainnet does not exist yet). Creators launch ERC-721 collections through a factory;
+anyone can mint during a public sale window, list, buy, and make offers on the marketplace.
+Full plan: [`plan.md`](plan.md).
 
-**Status: Phase 0–1 complete, local-only.** Contracts are written, tested (25/25) and
-smoke-tested on a local anvil. The frontend is built (Vite + React + wagmi) and
-verified against the local anvil (browse, create, mint, token pages — see
-`frontend/README.md`). **Nothing has been deployed to any live network and no
-money has been spent.**
+**Live site: https://squeekchain-launchpad-production.up.railway.app**
+
+**Status (updated 8 Nov 2026): live on Sepolia.** Factory, marketplace v3, verified-badge
+registry and indexer are all deployed and the site is public. The first sales have happened
+(Squeek #68 sold for 0.01 ETH twice on v2, then 0.011 ETH on v3). No demo collection has been
+created on the factory yet — that test is still pending.
+
+## Live contracts (Sepolia, chain ID 11155111)
+
+| Contract | Address | Notes |
+|---|---|---|
+| CollectionFactory | [`0x9Ba898622E30E2eB88B26143c6b1070789A5390f`](https://sepolia.etherscan.io/address/0x9Ba898622E30E2eB88B26143c6b1070789A5390f) | Deployed 6 Nov 2026, block 12075576 |
+| SqueekMarketplace (v3) | [`0x552E31c7ffc23C839f7bf0957B7DBaA32C055a12`](https://sepolia.etherscan.io/address/0x552E31c7ffc23C839f7bf0957B7DBaA32C055a12) | Deployed 8 Nov 2026, block 12088682; bytecode verified against the local build |
+| VerifiedRegistry | [`0x27ec54DeD78af3ced661Fbe8EfEB9f6E92EC8605`](https://sepolia.etherscan.io/address/0x27ec54DeD78af3ced661Fbe8EfEB9f6E92EC8605) | Owner-verified badge registry; Squeek is verified |
+| Squeek (official collection) | [`0xC4C7982657f00509548F3a3a41db7FA439a6856B`](https://sepolia.etherscan.io/address/0xC4C7982657f00509548F3a3a41db7FA439a6856B) | The hamster NFTs the marketplace was built around |
+
+Superseded: marketplace v1 (`0xbc686382758998dE68A065DBBd1a48b74C8880b8`) and v2
+(`0x54F515b7fd201e73c0c33e7d351243546bAe4CeF`) — do not use. One v2 collection offer
+(0.006 ETH, Level 2 only) is still escrowed in the old contract until it expires (~13 Nov 2026).
+
+## What the platform does
+
+- **Launchpad** — create an ERC-721 collection through the factory (fixed price, exact payment,
+  max supply, per-wallet cap, sale window, ERC-2981 royalties, default 5%). Mint during the sale.
+- **Marketplace** — escrow listings with an expiry you set (1–365 days, default 30); buying at the
+  exact listed price; per-token offers (ETH escrowed, expiring); collection offers priced as
+  total ÷ quantity, with an optional level filter (L1–L10) on levelled collections like Squeek;
+  bulk accept and bulk list from the Owned tab. **0% marketplace fee** — only the creator royalty
+  is paid on resales.
+- **Verified badge** — collections verified on-chain in the registry show a blue ✓.
+- **Indexer** — live on a hosted server, serving holders, levels, floors, volume and activity
+  (`/indexer/status` on the site). Volume is kept as running history across marketplace versions.
+- **Network safety** — the site shows a "Switch to Sepolia testnet" button when your wallet is on
+  the wrong network, and all spending buttons are disabled until you switch.
 
 ## Structure
 
@@ -20,14 +50,20 @@ squeekchain-launchpad/
 ├── contracts/               # Foundry project
 │   ├── src/
 │   │   ├── SqueekCollection.sol    # ERC-721 drop contract (clone implementation)
-│   │   └── CollectionFactory.sol   # Permissionless EIP-1167 clone factory
-│   ├── test/SqueekLaunchpad.t.sol  # 25 Foundry tests
+│   │   ├── CollectionFactory.sol   # Permissionless EIP-1167 clone factory
+│   │   ├── SqueekMarketplace.sol   # Marketplace v3 (escrow listings + offers)
+│   │   └── VerifiedRegistry.sol    # On-chain verified-badge registry
+│   ├── test/                       # Foundry tests (marketplace v3: 94/94 pass)
 │   ├── script/
-│   │   ├── Deploy.s.sol            # Sepolia deploy script (NOT run yet)
+│   │   ├── Deploy.s.sol            # Sepolia deploy script
 │   │   └── CreateDemoCollection.s.sol
 │   └── foundry.toml
-├── abi/                     # Exported ABIs (CollectionFactory, SqueekCollection)
-└── frontend/                # Vite + React + viem/wagmi (built, verified locally)
+├── abi/                     # Exported ABIs (factory, collection, marketplace, registry)
+├── frontend/                # Vite + React + viem/wagmi (live on Railway)
+├── indexer/                 # Node + SQLite indexer (live on a Vultr server)
+├── marketplace-deploy/      # Local-run deploy scripts for the marketplace
+├── verified-deploy/         # Local-run scripts for the registry
+└── deploy-local/            # Local-run deploy package for the factory
 ```
 
 ## Contracts
@@ -60,18 +96,37 @@ OpenZeppelin `ERC721` + `ERC721Enumerable` + `ERC2981` + `ReentrancyGuard`, `Ini
 - **Ownerless** — no admin, no fees, no allowlist. Anyone can launch.
 - Emits `CollectionCreated(collection, creator, name, symbol)`.
 
+### `SqueekMarketplace` (v3) — escrow listings + offers
+
+- **Listings are escrow-based**: listing moves the NFT into the marketplace contract; cancelling
+  (or expiry) is what returns it. A listing has a price and an expiry (duration set up front);
+  buying past expiry reverts, and the seller can re-list straight from escrow.
+- **Per-token offers** — bidder's ETH is escrowed; anyone may cancel an expired offer.
+- **Collection offers** — bidder enters a total price and a quantity; per-item price is
+  total ÷ quantity, with no maximum quantity. Offers can be filtered by level (L1–L10) on
+  levelled collections; the level is enforced on-chain. Accepting takes the highest live offer
+  per NFT; unfilled funds are refunded when the offer closes.
+- **Royalties** — ERC-2981 paid on every sale; **0% marketplace fee**; no owner/admin.
+
+### `VerifiedRegistry` — on-chain verified badge
+
+- `setVerified(address, bool)` is owner-only; `isVerified(address)` is read by the frontend.
+- To verify another collection: `node set-verified.mjs 0x<collection-address> true` in
+  `verified-deploy/` (no redeploy needed).
+
 ## Setup
 
 ### Contracts (Foundry)
 
 ```bash
 cd contracts
+forge install   # restores contracts/lib (forge-std, OpenZeppelin) — not committed
 forge build
 forge test
 ```
 
-Requires Foundry 1.9.0+ (`~/.foundry/bin` — see `contracts/README` if present).
-No API keys or private keys are needed for building or testing.
+Requires Foundry 1.9.0+ (`~/.foundry/bin`). No API keys or private keys are needed for
+building or testing.
 
 ### Local smoke test (anvil)
 
@@ -104,26 +159,36 @@ The frontend targets **Sepolia (chain ID 11155111)** and is clearly labelled
 **TEST NETWORK**. Wallet connect via wagmi. Public Sepolia RPC:
 `https://ethereum-sepolia-rpc.publicnode.com` — no keys in the repo.
 
-## Sepolia deployment (NOT done yet)
+Copy `frontend/.env.example` to `frontend/.env` and fill in the live contract addresses
+(factory, marketplace v3, verified registry) and the indexer URL.
 
-Scripts are ready but **never executed against a live network**:
+### Indexer
 
-- `contracts/script/Deploy.s.sol` — deploys the factory; requires chain ID 11155111 and
-  `PRIVATE_KEY` from the environment only.
-- `contracts/script/CreateDemoCollection.s.sol` — creates a demo collection on a deployed
-  factory; env-driven (`FACTORY_ADDRESS`, `COLLECTION_*`).
+```bash
+cd indexer
+npm install
+npm start       # serves on port 3001
+```
 
-**What is still needed before a Sepolia deployment can happen:**
+Needs `RPC_URL` (use the Tenderly Sepolia gateway for historical logs),
+`MARKETPLACE_ADDRESS` (v3), `START_BLOCK` and `DB_PATH` in `indexer/.env`.
+The indexer loads the marketplace ABI from `../abi/SqueekMarketplace.json` — the `abi/`
+folder must sit beside the `indexer/` folder. To rewind: stop the indexer, then
+`node src/rewind.mjs <block>` from `indexer/`.
 
-1. A **funded Sepolia deployer wallet** — Sepolia ETH for gas (factory deploy ≈ 1–2M gas
-   on real Sepolia). This goes through the user's **local-run route** (the deployer key
-   lives in a local `.env` on his own computer, exactly like the Squeekchain claim script;
-   the key is never sent to, or stored by, the assistant).
-2. The deployer runs `forge script script/Deploy.s.sol --rpc-url <sepolia-rpc> --broadcast`
-   from his machine, or the assistant runs it against a key he provides locally.
-3. After deployment, record the factory address in `frontend/.env` as
-   `VITE_FACTORY_ADDRESS` and verify the contracts on Sepolia Etherscan.
-4. Create one demo collection on Sepolia and mint once to confirm the live path.
+## Sepolia deployment
+
+All contracts are already deployed (see the table at the top). Deploys go through the
+**local-run route**: the deployer runs the scripts from their own computer with the key in a
+local `.env` file — the key is never sent to, or stored by, anyone else. Deploy scripts abort
+unless the key belongs to the expected deployer address and the chain is Sepolia (11155111).
+
+- Factory: `deploy-local/` (`deploy.mjs`)
+- Marketplace: `marketplace-deploy/`
+- Verified registry: `verified-deploy/`
+
+After a deploy, update the addresses in `frontend/.env` and `indexer/.env`, and record them
+in the table at the top of this README.
 
 No mainnet deployment is possible or planned — Squeekchain mainnet does not exist yet.
 
@@ -134,10 +199,28 @@ No mainnet deployment is possible or planned — Squeekchain mainnet does not ex
 | Sepolia (Squeekchain testnet) | 11155111 | https://ethereum-sepolia-rpc.publicnode.com |
 | Local anvil (smoke test) | 11155111 | http://127.0.0.1:8545 |
 
+## What's next
+
+- **Demo collection** — create Demo Squeeks on the factory (Sepolia) and mint once to confirm
+  the live create → mint → list path end to end.
+- **Phase 3 whitelist** — Merkle allowlist, new implementation + fresh factory deployment.
+- **Phase 5 swap** — Uniswap V2-style AMM with a demo token and seeded pools (no public
+  liquidity UI).
+- **Phase 6 profile extras** — username / PFP (off-chain recommended).
+
+## Notes on this repo
+
+- `contracts/lib/` (forge-std, OpenZeppelin) is **not committed** — run `forge install`.
+- `.env` files are **never committed** — only `.env.example` files are in the repo.
+- `frontend/public/hamster.jpg` and the preview screenshots are **not in the repo** (binary
+  files) — the site build expects the hamster image at that path; add it separately.
+- The indexer database (`indexer/data/`) is **not committed** — it is rebuilt from chain
+  history on first run (backfill from `START_BLOCK`).
+
 ## Rules for this repo
 
 - **No live deployments, no spending, no private keys or seed phrases** in the repo or in
   chat. Test keys are anvil defaults only.
 - **No contacting anyone, no modifying Squeekchain's own contracts.**
-- Test locally with anvil; Sepolia only when the user explicitly approves with a funded
-  deployer wallet via his local-run route.
+- Test locally with anvil; Sepolia only when explicitly approved with a funded
+  deployer wallet via the local-run route.
